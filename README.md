@@ -108,24 +108,26 @@ In `build.gradle.kts` of the first module, add the following line to the depende
 
 ### Renaming a Module
 
-Status IntelliJ 2023.2.5:
+Don't do this in IntelliJ, it does not work with version 2023.3.5. Instead, close IntelliJ and rename the Gradle
+subproject that corresponds with the module.
 
-- Right-click the module in IntelliJ, Refactor, Rename..., Rename module
-- Ignore errors
-- Manually rename the Gradle subproject in `settings.gradle.kts`
-- "Reload All Gradle Projects" with the button in the Gradle window
+1. **Rename the Directory**: First, rename the directory of the subproject.
+2. **Update `settings.gradle.kts`**: Update the subproject name in the parent project's `settings.gradle.kts` file.
+3. **Update Project References**: Update the subproject name where it was mentioned in build scripts
+   like `build.gradle.kts` or other Gradle files.
+4. **Sync Gradle**: Synchronize the Gradle files by running `./gradlew --refresh-dependencies` in the terminal.
 
 ### Deleting a Module
 
-Status IntelliJ 2023.2.5:
-
-- Navigate to IntelliJ's Project Structure (Ctrl+Alt+Shift+S)
-- Delete the module (in Project Settings, Modules)
-- Manually delete the directory
-- Manually remove the subproject from `settings.gradle.kts`
-- "Reload All Gradle Projects" with the button in the Gradle window
+You can try deleting the module in IntelliJ's Project Structure (Ctrl+Alt+Shift+S), then deleting the directory and
+finally removing any references to the module from files. Or you do it without IntelliJ, analogous to renaming a
+module, keeping in mind that a module corresponds to a subproject in Gradle.
 
 ### Troubleshooting
 
-If the build produces errors for `module-info.java` like "package is empty or does not exist", try adding some dummy
-Java file in the `src/main/java` directory of the module.
+If the build produces errors for `module-info.java` like "package is empty or does not exist", try creating the package
+stated in the error message under the `src/main/java` directory and add a minimal Java dummy file to it, something like
+this:
+
+    class Unused {
+    }
