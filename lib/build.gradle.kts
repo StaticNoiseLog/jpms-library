@@ -25,7 +25,8 @@ dependencies {
     // implementation(libs.guava)
 }
 
-// workaround required so that the Kotlin classes are found by the Java compiler
+// Workaround required so that Kotlin code can be used in Java files. Note that the module name
+// for the --patch-module argument must be the same as the module name in the module-info.java file.
 tasks.compileJava {
     options.compilerArgumentProviders.add(object : CommandLineArgumentProvider {
         @CompileClasspath

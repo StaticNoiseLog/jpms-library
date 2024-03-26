@@ -11,8 +11,8 @@ dependencies {
     testRuntimeOnly(libs.junit.platform.launcher) // JUnit 5 support for IDEs and build tools
 }
 
-// Workaround required so that the Kotlin classes are found by the Java compiler. Note that the module name
-// "jpms.library.deeplearning" must be the same as the module name in the module-info.java file.
+// Workaround required so that Kotlin code can be used in Java files. Note that the module name
+// for the --patch-module argument must be the same as the module name in the module-info.java file.
 tasks.compileJava {
     options.compilerArgumentProviders.add(object : CommandLineArgumentProvider {
         @CompileClasspath
