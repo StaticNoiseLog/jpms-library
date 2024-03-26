@@ -34,7 +34,7 @@ tasks.compileJava {
 
         override fun asArguments() = listOf(
             "--patch-module",
-            "jpms.library.lib=${kotlinClasses.get().asFile.absolutePath}"
+            "jpms.library.lib=${kotlinClasses.get().asFile.absolutePath}" // module name must match module-info.java
         )
     })
 }
