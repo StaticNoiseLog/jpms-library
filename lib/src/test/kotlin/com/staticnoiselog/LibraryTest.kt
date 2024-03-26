@@ -9,9 +9,9 @@ import kotlin.test.assertTrue
 
 class LibraryTest {
     @Test
-    fun someLibraryMethodReturnsTrue() {
+    fun methodCallingJavaReturnsTrue() {
         val classUnderTest = Library()
-        assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'")
+        assertTrue(classUnderTest.methodCallingJava("LibraryTest"), "methodCallingJava should return 'true'")
     }
 
     @Test
