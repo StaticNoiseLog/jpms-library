@@ -261,32 +261,26 @@ this:
 
 ### Running Kotlin Programs in IntelliJ
 
-In a JPMS module, if you try to run a Kotlin program in IntelliJ by right-clicking on the file with the `main` function
-and selecting `Run`, you get an error like this:
+In IntelliJ IDEA 2023.3.6, a limitation exists when executing Kotlin programs that are part of a JPMS module. If you
+attempt to run a Kotlin program in IntelliJ by right-clicking the file containing the `main` function and
+selecting `Run`, you get an error like this:
 
     Error: Could not find or load main class com.staticnoiselog.ai.MainKot in module jpms.library.deeplearning
 
-This is because IntelliJ does not set the module path correctly. As a workaround, you can copy IntelliJ's command line
-from the "Run" window, correct it manually and use it in a terminal. Basically you can remove the entire `-classpath`
-and fix the module path (`-p`, `--module-path`) by replacing the `..\build\classes\java\main` directory reference with
-the coorect JAR archive, e.g. `..\build\libs\deeplearning.jar`.
+This is because IntelliJ does not set the module path correctly. Instead of the JAR archive, it lists
+the `build\classes\java\main` directory in the module path.
 
-Here is how the command line
-for [MainKot.kt](deeplearning%2Fsrc%2Fmain%2Fkotlin%2Fcom%2Fstaticnoiselog%2Fai%2FMainKot.kt) would look conceptually:
+Here is a workaround:
 
-    java.exe -p C:\Users\taakabe4\BK\IT\DEV\JAVA\IntelliJ\jpms-library\deeplearning\build\libs\deeplearning.jar;<wherever>\kotlin-stdlib-1.9.23.jar -m jpms.library.deeplearning/com.staticnoiselog.ai.MainKot
+- In the console window where the error appears, copy the first line. This is the command that IntelliJ has constructed
+  to run the Kotlin main function.
+- Extract the entire `-p` part (the `--module-path`) and replace the "..\build\classes\java\main" directory with the
+  reference to the correct JAR archive, in our example. "..\build\libs\deeplearning.jar".
+- Edit the Run/Debug Configuration and paste the entire corrected `-p` part into the "VM options:" field.
 
-Alternatively, you can run the program from the terminal with Gradle. You have to add a `JavaExec` task to
-the `build.gradle.kts` file of the module that contains the Kotlin file:
+Now you should be able to run the Kotlin program, including debugging.
 
-    tasks.register<JavaExec>("runMainKot") {
-        mainClass = "com.staticnoiselog.ai.MainKot"
-        classpath = sourceSets.main.get().runtimeClasspath
-    }
+Alternatively, you can disable JPMS by temporarily removing/renaming the `module-info.java` file.
 
-Then you can run the program by calling the task:
-
-     ./gradlew runMainKot
-
-An issue is open for this limitation on the JetBrains'
+An issue exists for this limitation on the JetBrains'
 YouTrack: [KT-67015](https://youtrack.jetbrains.com/issue/KT-67015/Run-Configuration-Not-Working-in-Kotlin-JPMS-Gradle-Project)
